@@ -1,0 +1,27 @@
+﻿@model NET_Advanced.ViewModels.BestellingIndexViewModel
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Bestellingen van @Model.KlantNaam</h1>
+
+<p>
+    <a asp-action="Create">Maak nieuwe bestelling aan</a>
+</p>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>Naam</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var bestelling in Model.Bestellingen)
+        {
+            <tr>
+                <td>@bestelling.Naam</td>
+            </tr>
+        }
+    </tbody>
+</table>
