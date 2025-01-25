@@ -12,6 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("IdentityContex
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+builder.Services.AddRazorPages();
 builder.Services.AddDefaultIdentity<NET_AdvancedUser>(options => options.SignIn.RequireConfirmedAccount = false)
  .AddEntityFrameworkStores<IdentityContext>();
 
@@ -42,20 +43,20 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
+
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseAuthentication();
 app.UseAuthorization();
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
+    endpoints.MapRazorPages();
 });
-
-app.UseAuthentication();
 
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
-app.MapRazorPages();
 app.Run();
