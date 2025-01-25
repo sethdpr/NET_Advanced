@@ -12,7 +12,7 @@ var connectionString = builder.Configuration.GetConnectionString("IdentityContex
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-builder.Services.AddDefaultIdentity<NET_AdvancedUser>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddDefaultIdentity<NET_AdvancedUser>(options => options.SignIn.RequireConfirmedAccount = false)
  .AddEntityFrameworkStores<IdentityContext>();
 
 builder.Services.AddControllersWithViews();
