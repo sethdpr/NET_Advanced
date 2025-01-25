@@ -18,6 +18,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using NET_Advanced.Areas.Identity.Data;
 
 namespace NET_Advanced.Areas.Identity.Pages.Account
@@ -26,6 +27,7 @@ namespace NET_Advanced.Areas.Identity.Pages.Account
     {
         private readonly SignInManager<NET_AdvancedUser> _signInManager;
         private readonly UserManager<NET_AdvancedUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly IUserStore<NET_AdvancedUser> _userStore;
         private readonly IUserEmailStore<NET_AdvancedUser> _emailStore;
         private readonly ILogger<RegisterModel> _logger;
@@ -35,6 +37,7 @@ namespace NET_Advanced.Areas.Identity.Pages.Account
             UserManager<NET_AdvancedUser> userManager,
             IUserStore<NET_AdvancedUser> userStore,
             SignInManager<NET_AdvancedUser> signInManager,
+            RoleManager<IdentityRole> roleManager,
             ILogger<RegisterModel> logger,
             IEmailSender emailSender)
         {
@@ -42,6 +45,7 @@ namespace NET_Advanced.Areas.Identity.Pages.Account
             _userStore = userStore;
             _emailStore = GetEmailStore();
             _signInManager = signInManager;
+            _roleManager = roleManager;
             _logger = logger;
             _emailSender = emailSender;
         }
@@ -119,13 +123,13 @@ namespace NET_Advanced.Areas.Identity.Pages.Account
             ExternalLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
             if (ModelState.IsValid)
             {
-                var user = new NET_AdvancedUser 
-                    { 
-                        UserName = Input.Email, 
-                        Email = Input.Email, 
-                        Voornaam = Input.Voornaam, 
-                        Achternaam = Input.Achternaam 
-                    };
+                var user = new NET_AdvancedUser
+                {
+                    Email = Input.Email,
+                    Voornaam = Input.Voornaam,
+                    Achternaam = Input.Achternaam,
+                    IsAdmin = (Input.Email == "seth.depreter@gmail.com")
+                };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
@@ -134,6 +138,15 @@ namespace NET_Advanced.Areas.Identity.Pages.Account
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
+
+                    if (user.Email == "seth.depreter@gmail.com")
+                    {
+                        await _userManager.AddToRoleAsync(user, "Admin");
+                    }
+                    else
+                    {
+                        await _userManager.AddToRoleAsync(user, "Employee");
+                    }
 
                     var userId = await _userManager.GetUserIdAsync(user);
                     var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);

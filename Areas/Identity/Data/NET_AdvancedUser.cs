@@ -10,4 +10,5 @@ public class NET_AdvancedUser : IdentityUser
 {
     public string Voornaam { get; set; }
     public string Achternaam { get; set; }
+    public bool IsAdmin { get; set; }
 }
