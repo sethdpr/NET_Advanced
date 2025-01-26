@@ -8,10 +8,9 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
-var connectionString = builder.Configuration.GetConnectionString("IdentityContext");
 
 builder.Services.AddDbContext<IdentityContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlite(builder.Configuration.GetConnectionString("IdentityContextConnection")));
 
 builder.Services.AddRazorPages();
 builder.Services.AddDefaultIdentity<NET_AdvancedUser>(options => 
