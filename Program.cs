@@ -5,6 +5,7 @@ using NET_Advanced.Areas.Identity.Data;
 using NET_Advanced.Middleware;
 using Microsoft.AspNetCore.Identity;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+using Microsoft.Extensions.Options;
 
 var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("IdentityContext");
@@ -13,7 +14,11 @@ builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 builder.Services.AddRazorPages();
-builder.Services.AddDefaultIdentity<NET_AdvancedUser>(options => options.SignIn.RequireConfirmedAccount = false)
+builder.Services.AddDefaultIdentity<NET_AdvancedUser>(options => 
+{
+    options.SignIn.RequireConfirmedAccount = false;
+    options.Password.RequiredLength = 6;
+})
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<IdentityContext>();
 
@@ -45,8 +50,6 @@ else
     app.UseHsts();
 }
 
-await RoleInitializer.CreateRoles(app);
-
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
@@ -62,13 +65,14 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+await RoleInitializer.SeedDatabaseAsync(app.Services);
 app.Run();
 
 public static class RoleInitializer
 {
-    public static async Task CreateRoles(IApplicationBuilder app)
+    public static async Task SeedDatabaseAsync(IServiceProvider serviceProvider)
     {
-        using var scope = app.ApplicationServices.CreateScope();
+        using var scope = serviceProvider.CreateScope();
         var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
         var userManager = scope.ServiceProvider.GetRequiredService<UserManager<NET_AdvancedUser>>();
 
@@ -81,22 +85,32 @@ public static class RoleInitializer
             }
         }
 
-        var adminUser = await userManager.FindByEmailAsync("seth.depreter@gmail.com");
-        if (adminUser == null)
+        var users = new[]
         {
-            adminUser = new NET_AdvancedUser
-            {
-                Email = "seth.depreter@gmail.com",
-                Voornaam = "Seth",
-                Achternaam = "De Preter",
-                IsAdmin = true
-            };
-            await userManager.CreateAsync(adminUser, "Sethseth55!");
-        }
+            new { Email = "seth.depreter@gmail.com", Voornaam = "Seth", Achternaam = "De Preter", Password = "Sethseth55!", Role = "Admin", IsAdmin = true },
+            new { Email = "julie.beutels04@gmail.com", Voornaam = "Julie", Achternaam = "Beutels", Password = "Juliejulie55!", Role = "Employee", IsAdmin = false }
+        };
 
-        if (!await userManager.IsInRoleAsync(adminUser, "Admin"))
+        foreach (var userData in users)
         {
-            await userManager.AddToRoleAsync(adminUser, "Admin");
+            var user = await userManager.FindByEmailAsync(userData.Email);
+            if (user == null)
+            {
+                user = new NET_AdvancedUser
+                {
+                    UserName = userData.Email,
+                    Email = userData.Email,
+                    Voornaam = userData.Voornaam,
+                    Achternaam = userData.Achternaam,
+                    IsAdmin = userData.IsAdmin
+                };
+                await userManager.CreateAsync(user, userData.Password);
+            }
+
+            if (!await userManager.IsInRoleAsync(user, userData.Role))
+            {
+                await userManager.AddToRoleAsync(user, userData.Role);
+            }
         }
     }
 }
