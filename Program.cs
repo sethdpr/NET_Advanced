@@ -34,14 +34,7 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-app.UseMiddleware<ErrorHandlingMiddleware>();
-
-var supportedCultures = new[] { "en-US", "fr", "nl" };
-var localizationOptions = new RequestLocalizationOptions()
-    .SetDefaultCulture(supportedCultures[0])
-    .AddSupportedCultures(supportedCultures)
-    .AddSupportedUICultures(supportedCultures);
-app.UseRequestLocalization(localizationOptions);
+app.UseMiddleware<NET_Advanced.Middleware.ErrorHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using NET_Advanced.Data;
 using NET_Advanced.Models;
@@ -23,22 +25,24 @@ namespace NET_Advanced.Controllers
         // GET: BestellingModels
         public async Task<IActionResult> Index(int id)
         {
-            // Haal de bestellingen op die bij de klant-ID horen
+            var klant = _context.Klanten.FirstOrDefault(k => k.Id == id);
+            if (klant == null)
+            {
+                return NotFound();
+            }
             var bestellingen = _context.Bestellingen
-                .Where(b => b.KlantId == id) // Filter op klant-ID
+                .Where(b => b.KlantId == id)
                 .ToList();
 
-            // Optioneel: voeg de klantnaam toe voor context in de view
             var klantNaam = _context.Klanten
                 .Where(k => k.Id == id)
                 .Select(k => k.Naam)
                 .FirstOrDefault();
 
-            // Maak een viewmodel om de bestellingen en klantinformatie door te geven
             var viewModel = new BestellingIndexViewModel
             {
                 KlantId = id,
-                KlantNaam = klantNaam,
+                KlantNaam = klant.Naam,
                 Bestellingen = bestellingen
             };
 
@@ -65,10 +69,19 @@ namespace NET_Advanced.Controllers
         }
 
         // GET: BestellingModels/Create
-        public IActionResult Create()
+        public IActionResult Create(int klantId)
         {
-            ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam");
-            return View();
+            var klant = _context.Klanten.FirstOrDefault(k => k.Id == klantId);
+            if (klant == null)
+            {
+                return NotFound();
+            }
+            ViewData["Title"] = "Create";
+            ViewData["KlantNaam"] = klant.Naam;
+            var producten = _context.Producten.ToList();
+            ViewBag.Producten = producten;
+
+            return View(new BestellingModel { KlantId = klantId });
         }
 
         // POST: BestellingModels/Create
@@ -76,17 +89,74 @@ namespace NET_Advanced.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,KlantId")] BestellingModel bestellingModel)
+        public async Task<IActionResult> Create(
+        [Bind("Id,Naam,KlantId")] BestellingModel bestellingModel,
+        Dictionary<int, int> Producten)
         {
+            // Log direct wanneer de actie wordt aangeroepen
+            Debug.WriteLine("Create actie POST is aangeroepen.");
+
             if (ModelState.IsValid)
             {
+                Debug.WriteLine("ModelState is geldig.");
+
+                // Voeg de bestelling toe aan de database
                 _context.Add(bestellingModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index), new { id = bestellingModel.KlantId });
+                await _context.SaveChangesAsync(); // Nu heeft bestellingModel.Id een waarde
+
+                // Log de Id van de bestelling
+                Debug.WriteLine($"Bestelling opgeslagen. BestellingId = {bestellingModel.Id}");
+
+                if (Producten != null)
+                {
+                    // Log de producten en hoeveelheden
+                    Debug.WriteLine("Producten ontvangen:");
+                    foreach (var productId in Producten.Keys)
+                    {
+                        var aantal = Producten[productId];
+                        Debug.WriteLine($"ProductId = {productId}, Aantal = {aantal}");
+
+                        if (aantal > 0)
+                        {
+                            var bestellingProduct = new BestellingProductModel
+                            {
+                                BestellingId = bestellingModel.Id, // Het Id van de bestelling moet hier ingesteld worden
+                                ProductId = productId,
+                                Aantal = aantal
+                            };
+
+                            // Voeg het bestellingProduct toe aan de database
+                            _context.Add(bestellingProduct);
+                            Debug.WriteLine($"Bestelling product toegevoegd: ProductId = {productId}, Aantal = {aantal}");
+                        }
+                    }
+
+                    await _context.SaveChangesAsync(); // Opslaan van de producten
+                    Debug.WriteLine("Bestellingproducten opgeslagen.");
+                }
+                else
+                {
+                    Debug.WriteLine("Geen producten ontvangen.");
+                }
+
+                // Redirect naar de Index van BestellingModels, waarbij de klantId wordt meegegeven
+                return RedirectToAction("Index", "BestellingModels", new { id = bestellingModel.KlantId });
             }
+            else
+            {
+                // Log eventuele fouten in de ModelState
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Debug.WriteLine($"Error: {error.ErrorMessage}");
+                }
+                Debug.WriteLine("ModelState is niet geldig.");
+            }
+
+            // Dit komt alleen als er iets mis was met de validatie, terug naar het formulier
             ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);
             return View(bestellingModel);
         }
+
 
         // GET: BestellingModels/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -7,7 +7,7 @@
 <h1>Bestellingen van @Model.KlantNaam</h1>
 
 <p>
-    <a asp-action="Create">Maak nieuwe bestelling aan</a>
+    <a asp-action="Create" asp-route-klantId="@Model.KlantId">Maak nieuwe bestelling aan</a>
 </p>
 
 <table class="table">
@@ -21,6 +21,11 @@
         {
             <tr>
                 <td>@bestelling.Naam</td>
+                <td>
+                    <a asp-action="Details" asp-route-id="@bestelling.Id" class="btn btn-info">Details</a>
+                    <a asp-action="Edit" asp-route-id="@bestelling.Id" class="btn btn-warning">Bewerken</a>
+                    <a asp-action="Delete" asp-route-id="@bestelling.Id" class="btn btn-danger">Verwijderen</a>
+                </td>
             </tr>
         }
     </tbody>
