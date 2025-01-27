@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using NET_Advanced.Data;
 using NET_Advanced.Models;
+using Newtonsoft.Json;
 
 namespace NET_Advanced.Controllers
 {
@@ -35,16 +36,55 @@ namespace NET_Advanced.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam,Prijs")] ProductModel productModel)
+        public async Task<IActionResult> CreateAjax()
         {
-            if (ModelState.IsValid)
+            string requestBody;
+            try
+            {
+                using (var reader = new StreamReader(Request.Body))
+                {
+                    requestBody = await reader.ReadToEndAsync();
+                }
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Kan de request body niet lezen." });
+            }
+
+            ProductModel productModel;
+            try
+            {
+                productModel = JsonConvert.DeserializeObject<ProductModel>(requestBody);
+            }
+            catch (Exception)
+            {
+                return Json(new { success = false, message = "Kan de JSON data niet verwerken." });
+            }
+
+            if (string.IsNullOrWhiteSpace(productModel.Naam))
+            {
+                return Json(new { success = false, message = "De veld 'Naam' is verplicht." });
+            }
+
+            if (productModel.Prijs <= 0)
+            {
+                return Json(new { success = false, message = "Prijs moet een positief getal zijn." });
+            }
+
+            try
             {
                 _context.Add(productModel);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Json(new { success = true, message = "Product succesvol aangemaakt!" });
             }
-            return View(productModel);
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = $"Er is een fout opgetreden bij het opslaan: {ex.Message}" });
+            }
         }
+
+
+
 
         // GET: ProductModels/Edit/5
         public async Task<IActionResult> Edit(int? id)

@@ -10,17 +10,6 @@ namespace NET_Advanced.Models
         [Required]
         [StringLength(100)]
         public string Naam { get; set; }
-        private decimal _prijs;
-        public decimal Prijs
-        {
-            get
-            {
-                return _prijs;
-            }
-            set
-            {
-                _prijs = value / 100;
-            }
-        }
+        public decimal Prijs { get; set; }
     }
 }

@@ -22,7 +22,11 @@ builder.Services.AddDefaultIdentity<NET_AdvancedUser>(options =>
     .AddEntityFrameworkStores<IdentityContext>();
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddControllers();
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.PropertyNamingPolicy = null;
+    });
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApplicationName", Version = "v1" });
