@@ -12,13 +12,33 @@
     <header>
         <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-dark dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown">
+                        @if (Thread.CurrentThread.CurrentCulture.ToString() == "nl-NL")
+                        {
+                            <span>Nederlands</span>
+                        }
+                        else if (Thread.CurrentThread.CurrentCulture.ToString() == "fr-FR")
+                        {
+                            <span>Français</span>
+                        }
+                        else
+                        {
+                            <span>English</span>
+                        }
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="ChangeLanguage" asp-route-lang="nl-NL">Nederlands</a></li>
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="ChangeLanguage" asp-route-lang="fr-FR">Français</a></li>
+                        <li><a class="dropdown-item" asp-controller="Home" asp-action="ChangeLanguage" asp-route-lang="en-US">English</a></li>
+                    </ul>
+                </li>
                 <p class="navbar-brand" style="margin-top: 14px">Wolfshagen</p>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <!-- Linkerbalk -->
                     <ul class="navbar-nav flex-grow-1">
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
@@ -29,6 +49,8 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="ProductModels" asp-action="Index">Producten</a>
                         </li>
+                    </ul>
+                    <ul class="navbar-nav text-end">
                     </ul>
                     <partial name="_LoginPartial" />
                 </div>

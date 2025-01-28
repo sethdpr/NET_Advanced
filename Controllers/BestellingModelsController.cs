@@ -93,23 +93,19 @@ namespace NET_Advanced.Controllers
         [Bind("Id,Naam,KlantId")] BestellingModel bestellingModel,
         Dictionary<int, int> Producten)
         {
-            // Log direct wanneer de actie wordt aangeroepen
             Debug.WriteLine("Create actie POST is aangeroepen.");
 
             if (ModelState.IsValid)
             {
                 Debug.WriteLine("ModelState is geldig.");
 
-                // Voeg de bestelling toe aan de database
                 _context.Add(bestellingModel);
-                await _context.SaveChangesAsync(); // Nu heeft bestellingModel.Id een waarde
+                await _context.SaveChangesAsync();
 
-                // Log de Id van de bestelling
                 Debug.WriteLine($"Bestelling opgeslagen. BestellingId = {bestellingModel.Id}");
 
                 if (Producten != null)
                 {
-                    // Log de producten en hoeveelheden
                     Debug.WriteLine("Producten ontvangen:");
                     foreach (var productId in Producten.Keys)
                     {
@@ -120,18 +116,17 @@ namespace NET_Advanced.Controllers
                         {
                             var bestellingProduct = new BestellingProductModel
                             {
-                                BestellingId = bestellingModel.Id, // Het Id van de bestelling moet hier ingesteld worden
+                                BestellingId = bestellingModel.Id,
                                 ProductId = productId,
                                 Aantal = aantal
                             };
 
-                            // Voeg het bestellingProduct toe aan de database
                             _context.Add(bestellingProduct);
                             Debug.WriteLine($"Bestelling product toegevoegd: ProductId = {productId}, Aantal = {aantal}");
                         }
                     }
 
-                    await _context.SaveChangesAsync(); // Opslaan van de producten
+                    await _context.SaveChangesAsync();
                     Debug.WriteLine("Bestellingproducten opgeslagen.");
                 }
                 else
@@ -139,12 +134,10 @@ namespace NET_Advanced.Controllers
                     Debug.WriteLine("Geen producten ontvangen.");
                 }
 
-                // Redirect naar de Index van BestellingModels, waarbij de klantId wordt meegegeven
                 return RedirectToAction("Index", "BestellingModels", new { id = bestellingModel.KlantId });
             }
             else
             {
-                // Log eventuele fouten in de ModelState
                 foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
                 {
                     Debug.WriteLine($"Error: {error.ErrorMessage}");
@@ -152,7 +145,6 @@ namespace NET_Advanced.Controllers
                 Debug.WriteLine("ModelState is niet geldig.");
             }
 
-            // Dit komt alleen als er iets mis was met de validatie, terug naar het formulier
             ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);
             return View(bestellingModel);
         }
