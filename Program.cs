@@ -34,6 +34,7 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
+//swagger to test api
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApplicationName", Version = "v1" });
@@ -52,7 +53,7 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-
+//language choice gets saved in a cookie. This code retrieves the cookie and sets the culture accordingly
 app.Use(async (context, next) =>
 {
     string cookie = string.Empty;
@@ -75,6 +76,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
+//configure project for mvc and razor pages
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
