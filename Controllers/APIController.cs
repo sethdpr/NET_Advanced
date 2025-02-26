@@ -12,32 +12,29 @@ namespace NET_Advanced.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize]
+    //[Authorize]
     //Gebruikt in AdminController.cs
     public class APIController : ControllerBase
     {
         private readonly UserManager<NET_AdvancedUser> _userManager;
 
-        // Constructor die de UserManager injecteert voor toegang tot Identity
         public APIController(UserManager<NET_AdvancedUser> userManager)
         {
             _userManager = userManager;
         }
 
-        // GET: api/users (Haalt alle gebruikers op)
+        // GET: api/users
         [HttpGet("users")]
         public async Task<ActionResult<IEnumerable<NET_AdvancedUser>>> GetAllUsers()
         {
-            // Haal alle gebruikers op uit de IdentityDbContext
             var users = await _userManager.Users.ToListAsync();
 
-            // Als er geen gebruikers zijn
-            if (users == null || users.Count == 0)
+            if (users == null || !users.Any())
             {
-                return NotFound("Geen gebruikers gevonden.");
+                return NotFound("Geen gebruikers gevonden");
             }
 
-            return Ok(users);  // Retourneer de lijst van gebruikers
+            return Ok(users);
         }
     }
 }

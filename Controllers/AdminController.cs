@@ -12,27 +12,24 @@ namespace NET_Advanced.Controllers
     public class AdminController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly UserManager<NET_AdvancedUser> _userManager;
 
-        public AdminController(HttpClient httpClient, UserManager<NET_AdvancedUser> userManager)
+        public AdminController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _userManager = userManager;
         }
 
         // GET: /Admin/Index
         public async Task<IActionResult> Index()
         {
-            var users = await _userManager.Users.ToListAsync();  // Haalt de gebruikers op uit de Identity DB.
-
-            // Als er geen gebruikers zijn, geef een lege lijst door aan de view
-            if (users == null || users.Count == 0)
+            var response = await _httpClient.GetAsync("https://localhost:7156/api/API/users");
+            if (response.IsSuccessStatusCode)
             {
-                return View(new List<NET_AdvancedUser>());
+                var usersJson = await response.Content.ReadAsStringAsync();
+                var users = JsonConvert.DeserializeObject<List<NET_AdvancedUser>>(usersJson);
+                return View(users);
             }
 
-            // Geef de gebruikerslijst door aan de view
-            return View(users);
+            return View(new List<NET_AdvancedUser>());
         }
     }
 }

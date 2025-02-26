@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,6 +43,20 @@ builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApplicationName", Version = "v1" });
 });
+
+/*builder.Services.AddAuthentication(options =>
+/{
+    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+})
+.AddCookie(options =>
+{
+    options.LoginPath = "/Account/Login";  // De loginpagina waar gebruikers naartoe worden geleid als ze niet zijn ingelogd
+    options.AccessDeniedPath = "/Account/AccessDenied";  // Pagina voor toegang geweigerd
+    options.Cookie.Name = "AuthorisatieCookie";  // Naam van de cookie
+    options.ExpireTimeSpan = TimeSpan.FromDays(365);  // Verlooptijd van de cookie
+});*/
+
 
 var app = builder.Build();
 app.UseMiddleware<LanguageMiddleware>();
