@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Localization;
 using System.Globalization;
+using Microsoft.AspNetCore.Localization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+builder.Services.AddLocalization();
 
 builder.Services.AddDbContext<IdentityContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("IdentityContextConnection")));
@@ -28,6 +29,8 @@ builder.Services.AddControllersWithViews()
     .AddDataAnnotationsLocalization()
     .AddViewLocalization();
 
+builder.Services.AddHttpClient();
+
 builder.Services.AddControllers()
     .AddJsonOptions(options =>
     {
@@ -41,8 +44,8 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 var app = builder.Build();
-
-app.UseMiddleware<NET_Advanced.Middleware.ErrorHandlingMiddleware>();
+app.UseMiddleware<LanguageMiddleware>();
+app.UseMiddleware<ErrorHandlingMiddleware>();
 
 if (app.Environment.IsDevelopment())
 {
@@ -53,22 +56,6 @@ else
     app.UseExceptionHandler("/Home/Error");
     app.UseHsts();
 }
-//language choice gets saved in a cookie. This code retrieves the cookie and sets the culture accordingly
-app.Use(async (context, next) =>
-{
-    string cookie = string.Empty;
-    if (context.Request.Cookies.TryGetValue("Language", out cookie))
-    {
-        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo(cookie);
-        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo(cookie);
-    }
-    else
-    {
-        System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("nl-NL");
-        System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("nl-NL");
-    }
-    await next.Invoke();
-});
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

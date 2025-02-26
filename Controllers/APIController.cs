@@ -1,102 +1,39 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using NET_Advanced.Data;
 using NET_Advanced.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using NET_Advanced.Areas.Identity.Data;
 
 namespace NET_Advanced.Controllers
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("api/[controller]")]
+    [Authorize]
+    //Gebruikt in AdminController.cs
     public class APIController : ControllerBase
     {
-        private readonly IdentityContext _context;
+        private readonly UserManager<NET_AdvancedUser> _userManager;
 
-        public APIController(IdentityContext context)
+        public APIController(UserManager<NET_AdvancedUser> userManager)
         {
-            _context = context;
+            _userManager = userManager;
         }
 
-        // GET: /API
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<API>>> GetAllAPI()
+        // GET: api/users
+        [HttpGet("/users")]
+        public async Task<ActionResult<IEnumerable<NET_AdvancedUser>>> GetAllUsers()
         {
-            var items = await _context.API.ToListAsync();
-            return Ok(items);
-        }
+            var users = await _userManager.Users.ToListAsync();
 
-        // GET: /API/5
-        [HttpGet("{id}")]
-        public async Task<ActionResult<API>> GetAPIById(int id)
-        {
-            var api = await _context.API.FindAsync(id);
-
-            if (api == null)
+            if (users == null || users.Count == 0)
             {
-                return NotFound();
+                return NotFound("Geen gebruikers gevonden.");
             }
 
-            return Ok(api);
-        }
-
-        // POST: /API
-        [HttpPost]
-        public async Task<ActionResult<API>> CreateAPI([FromBody] API newAPI)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            _context.API.Add(newAPI);
-            await _context.SaveChangesAsync();
-
-            return CreatedAtAction(nameof(GetAPIById), new { id = newAPI.Id }, newAPI);
-        }
-
-        // PUT: /API/5
-        [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateAPI(int id, [FromBody] API updatedAPI)
-        {
-            if (id != updatedAPI.Id)
-            {
-                return BadRequest("ID in URL komt niet overeen met ID in body");
-            }
-
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            var existingAPI = await _context.API.FindAsync(id);
-            if (existingAPI == null)
-            {
-                return NotFound();
-            }
-
-            _context.Entry(existingAPI).CurrentValues.SetValues(updatedAPI);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
-        }
-
-        // DELETE: /API/5
-        [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteAPI(int id)
-        {
-            var api = await _context.API.FindAsync(id);
-            if (api == null)
-            {
-                return NotFound();
-            }
-
-            _context.API.Remove(api);
-            await _context.SaveChangesAsync();
-
-            return NoContent();
+            return Ok(users);
         }
     }
 }
-

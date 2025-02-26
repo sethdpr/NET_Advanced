@@ -1,9 +1,10 @@
 ﻿@{
     ViewData["Title"] = "Home Page";
 }
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
+
 <div class="text-center">
-    <h1 class="display-4">Welkom bij Rita</h1>
-    <p>Gebruik de navigatiebalk om het programma te gerbuiken.</p>
-    <!-- <h1 class="display-4">NET_Advanced.Resources.Resource.HomePageTitle</h1> -->
-    <!-- <p>NET_Advanced.Resources.Resource.HomePageDescription</p> -->
+    <h1 class="display-4">@Localizer["HomePageTitle"]</h1>
+    <p>@Localizer["HomePageDescription"]</p>
 </div>

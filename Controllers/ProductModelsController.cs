@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -32,8 +33,6 @@ namespace NET_Advanced.Controllers
         }
 
         // POST: ProductModels/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> CreateAjax()
@@ -63,7 +62,7 @@ namespace NET_Advanced.Controllers
 
             if (string.IsNullOrWhiteSpace(productModel.Naam))
             {
-                return Json(new { success = false, message = "De veld 'Naam' is verplicht." });
+                return Json(new { success = false, message = "Het veld 'Naam' is verplicht." });
             }
 
             if (productModel.Prijs <= 0)
@@ -82,9 +81,6 @@ namespace NET_Advanced.Controllers
                 return Json(new { success = false, message = $"Er is een fout opgetreden bij het opslaan: {ex.Message}" });
             }
         }
-
-
-
 
         // GET: ProductModels/Edit/5
         public async Task<IActionResult> Edit(int? id)

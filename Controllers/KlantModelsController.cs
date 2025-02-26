@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using NET_Advanced.Data;
 using NET_Advanced.Models;
+using Newtonsoft.Json;
 
 namespace NET_Advanced.Controllers
 {
@@ -32,15 +33,32 @@ namespace NET_Advanced.Controllers
         // POST: KlantModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Naam")] KlantModel klantModel)
+        public async Task<IActionResult> CreateAjax([FromBody] KlantModel klantModel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(klantModel);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    _context.Add(klantModel);
+                    await _context.SaveChangesAsync();
+                    return Json(new { success = true, message = "Klant succesvol aangemaakt!" });
+                }
+                catch (Exception ex)
+                {
+                    return Json(new { success = false, message = $"Er is een fout opgetreden bij het opslaan: {ex.Message}" });
+                }
             }
-            return View(klantModel);
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors)
+                                          .Select(e => e.ErrorMessage)
+                                          .ToList();
+
+            return Json(new
+            {
+                success = false,
+                message = "Er is een probleem met de formulierdata.",
+                errors = errors
+            });
         }
 
         // GET: KlantModels/Edit/5
