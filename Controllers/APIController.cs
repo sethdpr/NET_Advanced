@@ -36,5 +36,24 @@ namespace NET_Advanced.Controllers
 
             return Ok(users);
         }
+        // DELETE: api/users/{id}
+        [HttpDelete("users/{id}")]
+        public async Task<IActionResult> DeleteUser(string id)
+        {
+            var user = await _userManager.FindByIdAsync(id);
+            if (user == null)
+            {
+                return NotFound("De gebruiker bestaat niet.");
+            }
+
+            var result = await _userManager.DeleteAsync(user);
+
+            if (result.Succeeded)
+            {
+                return NoContent();
+            }
+
+            return BadRequest(result.Errors);
+        }
     }
 }

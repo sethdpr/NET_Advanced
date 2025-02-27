@@ -16,7 +16,6 @@
             <tr>
                 <th>Gebruikersnaam</th>
                 <th>Email</th>
-                <th>Acties</th>
             </tr>
         </thead>
         <tbody>
@@ -26,8 +25,10 @@
                     <td>@user.UserName</td>
                     <td>@user.Email</td>
                     <td>
-                        <a href="@Url.Action("Edit", "Admin", new { id = user.Id })">Bewerken</a> |
-                        <a href="@Url.Action("Delete", "Admin", new { id = user.Id })">Verwijderen</a>
+                        <form asp-action="Delete" method="post" style="display:inline;">
+                            <input type="hidden" name="id" value="@user.Id" />
+                            <button type="submit" class="btn btn-danger">Verwijderen</button>
+                        </form>
                     </td>
                 </tr>
             }

@@ -31,5 +31,20 @@ namespace NET_Advanced.Controllers
 
             return View(new List<NET_AdvancedUser>());
         }
+        // POST: /Admin/Delete
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+            var response = await _httpClient.DeleteAsync($"https://localhost:7156/api/API/users/{id}");
+
+            if (response.IsSuccessStatusCode)
+            {
+                return RedirectToAction("Index");
+            }
+
+            TempData["ErrorMessage"] = "Er is een fout opgetreden bij het verwijderen van de gebruiker.";
+            return RedirectToAction("Index");
+        }
     }
 }

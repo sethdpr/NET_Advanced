@@ -45,16 +45,16 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 /*builder.Services.AddAuthentication(options =>
-/{
+{
     options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
     options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
 })
 .AddCookie(options =>
 {
-    options.LoginPath = "/Account/Login";  // De loginpagina waar gebruikers naartoe worden geleid als ze niet zijn ingelogd
-    options.AccessDeniedPath = "/Account/AccessDenied";  // Pagina voor toegang geweigerd
-    options.Cookie.Name = "AuthorisatieCookie";  // Naam van de cookie
-    options.ExpireTimeSpan = TimeSpan.FromDays(365);  // Verlooptijd van de cookie
+    options.LoginPath = "/Account/Login";
+    options.AccessDeniedPath = "/Account/AccessDenied";
+    options.Cookie.Name = "AuthorisatieCookie";
+    options.ExpireTimeSpan = TimeSpan.FromDays(365);
 });*/
 
 
