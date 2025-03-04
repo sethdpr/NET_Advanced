@@ -89,6 +89,11 @@ app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
 
+app.MapControllerRoute(
+    name: "bestellingIndex",
+    pattern: "BestellingModels/Index/{klantId}",
+    defaults: new { controller = "BestellingModels", action = "Index" });
+
 await RoleInitializer.SeedDatabaseAsync(app.Services);
 
 app.Run();

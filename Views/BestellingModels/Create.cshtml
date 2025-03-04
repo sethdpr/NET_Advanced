@@ -52,7 +52,7 @@
 </div>
 
 <div>
-    <a asp-action="Index">@Localizer["BackToList"]</a>
+    <a asp-action="Index" asp-route-id="@Model.KlantId">@Localizer["BackToList"]</a>
 </div>
 
 @section Scripts {
