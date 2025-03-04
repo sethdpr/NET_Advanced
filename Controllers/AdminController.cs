@@ -6,16 +6,20 @@ using Newtonsoft.Json;
 using NET_Advanced.Areas.Identity.Data;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
+using NET_Advanced.Resources;
 
 namespace NET_Advanced.Controllers
 {
     public class AdminController : Controller
     {
         private readonly HttpClient _httpClient;
+        private readonly IStringLocalizer<Resource> _localizer;
 
-        public AdminController(HttpClient httpClient)
+        public AdminController(HttpClient httpClient, IStringLocalizer<Resource> localizer)
         {
             _httpClient = httpClient;
+            _localizer = localizer;
         }
 
         // GET: /Admin/Index

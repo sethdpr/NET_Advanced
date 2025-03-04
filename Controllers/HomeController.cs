@@ -47,8 +47,7 @@ namespace NET_Advanced.Controllers
                     Expires = DateTimeOffset.Now.AddYears(1)
                 });
             }
-
-            return RedirectToAction("Index");
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

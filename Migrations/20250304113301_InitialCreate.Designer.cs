@@ -11,7 +11,7 @@ using NET_Advanced.Data;
 namespace NET_Advanced.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    [Migration("20250126161028_InitialCreate")]
+    [Migration("20250304113301_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />

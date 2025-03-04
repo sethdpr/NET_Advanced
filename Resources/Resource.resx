@@ -123,4 +123,34 @@
   <data name="HomePageTitle" xml:space="preserve">
     <value>Welkom bij Rita!</value>
   </data>
+  <data name="UserlistPageUsernameHeader" xml:space="preserve">
+    <value>Gebruikersnaam</value>
+  </data>
+  <data name="UserlistPageTitle" xml:space="preserve">
+    <value>Gebruikerslijst</value>
+  </data>
+  <data name="UserlistPageAddNewUserButton" xml:space="preserve">
+    <value>Nieuwe gebruiker toevoegen</value>
+  </data>
+  <data name="Create" xml:space="preserve">
+    <value>Aanmaken</value>
+  </data>
+  <data name="OrderPageAddNewOrderByClient" xml:space="preserve">
+    <value>Nieuwe bestelling aanmaken voor</value>
+  </data>
+  <data name="OrderPageAddNewOrderTableHeader" xml:space="preserve">
+    <value>Producten &amp; aantallen</value>
+  </data>
+  <data name="IfNoProducts" xml:space="preserve">
+    <value>Geen producten beschikbaar</value>
+  </data>
+  <data name="BackToList" xml:space="preserve">
+    <value>Terug naar lijst</value>
+  </data>
+  <data name="Delete" xml:space="preserve">
+    <value>Verwijder</value>
+  </data>
+  <data name="DeleteWarning" xml:space="preserve">
+    <value>Ben je zeker dat je dit wilt verwijderen</value>
+  </data>
 </root>
