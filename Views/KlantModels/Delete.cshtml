@@ -1,18 +1,12 @@
 ﻿@model NET_Advanced.Models.KlantModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Delete";
-}
+<h1>@Localizer["Delete"]</h1>
 
-<h1>Verwijder</h1>
-
-<h3>Ben je zeker dat je deze klant wilt verwijderen</h3>
 <div>
     <hr />
     <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Naam)
-        </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Naam)
         </dd>
@@ -20,7 +14,7 @@
     
     <form asp-action="Delete">
         <input type="hidden" asp-for="Id" />
-        <input type="submit" value="Verwijder" class="btn btn-danger" /> |
-        <a asp-action="Index">Terug naar klantenlijst</a>
+        <input type="submit" value="@Localizer["Delete"]" class="btn btn-danger" /> |
+        <a asp-action="Index">@Localizer["BackToList"]</a>
     </form>
 </div>

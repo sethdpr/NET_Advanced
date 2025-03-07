@@ -14,12 +14,10 @@ namespace NET_Advanced.Controllers
     public class AdminController : Controller
     {
         private readonly HttpClient _httpClient;
-        private readonly IStringLocalizer<Resource> _localizer;
 
-        public AdminController(HttpClient httpClient, IStringLocalizer<Resource> localizer)
+        public AdminController(HttpClient httpClient)
         {
             _httpClient = httpClient;
-            _localizer = localizer;
         }
 
         // GET: /Admin/Index
@@ -47,7 +45,6 @@ namespace NET_Advanced.Controllers
                 return RedirectToAction("Index");
             }
 
-            TempData["ErrorMessage"] = "Er is een fout opgetreden bij het verwijderen van de gebruiker.";
             return RedirectToAction("Index");
         }
     }

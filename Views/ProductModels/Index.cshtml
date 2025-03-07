@@ -1,25 +1,23 @@
 ﻿@model IEnumerable<NET_Advanced.Models.ProductModel>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Producten</h1>
+<h1>@Localizer["Products"]</h1>
 
 @if (User.IsInRole("Admin")) 
 {
     <p>
-        <a asp-action="Create">Maak nieuw product aan</a>
+        <a asp-action="Create">@Localizer["Create"]</a>
     </p>
 }
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Naam)
+                <p>@Localizer["Name"]</p>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Prijs)
+                <p>@Localizer["Price"]</p>
             </th>
             <th></th>
         </tr>
@@ -36,8 +34,8 @@
                 @if (User.IsInRole("Admin"))
                 {
                     <td>
-                        <a asp-action="Edit" asp-route-id="@item.Id">Bewerk</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Id">Verwijder</a>
+                        <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Edit"]</a> |
+                        <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a>
                     </td>
                 }
         </tr>

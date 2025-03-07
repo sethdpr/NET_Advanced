@@ -1,9 +1,12 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Elfie.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using NET_Advanced.Data;
+using NET_Advanced.Resources;
 using NET_Advanced.Models;
 using Newtonsoft.Json;
 
@@ -12,10 +15,12 @@ namespace NET_Advanced.Controllers
     public class KlantModelsController : Controller
     {
         private readonly IdentityContext _context;
+        private readonly IStringLocalizer<KlantModelsController> _localizer;
 
-        public KlantModelsController(IdentityContext context)
+        public KlantModelsController(IdentityContext context, IStringLocalizer<KlantModelsController> localizer)
         {
             _context = context;
+            _localizer = localizer;
         }
 
         // GET: KlantModels
@@ -41,11 +46,11 @@ namespace NET_Advanced.Controllers
                 {
                     _context.Add(klantModel);
                     await _context.SaveChangesAsync();
-                    return Json(new { success = true, message = "Klant succesvol aangemaakt!" });
+                    return Json(new { success = true, message = "Succes" });
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    return Json(new { success = false, message = $"Er is een fout opgetreden bij het opslaan: {ex.Message}" });
+                    return Json(new { success = false, message = "Error" });
                 }
             }
 
@@ -56,8 +61,7 @@ namespace NET_Advanced.Controllers
             return Json(new
             {
                 success = false,
-                message = "Er is een probleem met de formulierdata.",
-                errors = errors
+                message = "Error"
             });
         }
 

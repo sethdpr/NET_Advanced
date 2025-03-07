@@ -1,12 +1,10 @@
 ﻿@model NET_Advanced.Models.KlantModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<h1>@Localizer["Edit"]</h1>
 
-<h1>Bewerken</h1>
-
-<h4>Klant</h4>
+<h4>@Localizer["Customer"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,19 +12,19 @@
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="Naam" class="control-label"></label>
+                <label asp-for="Naam" class="control-label">@Localizer["Name"]</label>
                 <input asp-for="Naam" class="form-control" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Bevestigen" class="btn btn-primary" />
+                <input type="submit" value="@Localizer["Confirm"]" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Terug naar klantenlijst</a>
+    <a asp-action="Index">@Localizer["BackToList"]</a>
 </div>
 
 @section Scripts {

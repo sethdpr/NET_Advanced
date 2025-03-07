@@ -1,19 +1,17 @@
 ﻿@model NET_Advanced.ViewModels.BestellingIndexViewModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Bestellingen van @Model.KlantNaam</h1>
+<h1>@Localizer["OrderByName"] @Model.KlantNaam</h1>
 
 <p>
-    <a asp-action="Create" asp-route-klantId="@Model.KlantId">Maak nieuwe bestelling aan</a>
+    <a asp-action="Create" asp-route-klantId="@Model.KlantId">@Localizer["CreateNewOrder"]</a>
 </p>
 
 <table class="table">
     <thead>
         <tr>
-            <th>Naam</th>
+            <th>@Localizer["Name"]</th>
         </tr>
     </thead>
     <tbody>
@@ -22,9 +20,9 @@
             <tr>
                 <td>@bestelling.Naam</td>
                 <td>
-                    <a asp-action="Details" asp-route-id="@bestelling.Id" class="btn btn-info">Details</a>
-                    <a asp-action="Edit" asp-route-id="@bestelling.Id" class="btn btn-warning">Bewerken</a>
-                    <a asp-action="Delete" asp-route-id="@bestelling.Id" class="btn btn-danger">Verwijderen</a>
+                    <a asp-action="Details" asp-route-id="@bestelling.Id" class="btn btn-info">@Localizer["Details"]</a>
+                    <a asp-action="Edit" asp-route-id="@bestelling.Id" class="btn btn-warning">@Localizer["Edit"]</a>
+                    <a asp-action="Delete" asp-route-id="@bestelling.Id" class="btn btn-danger">@Localizer["Delete"]</a>
                 </td>
             </tr>
         }

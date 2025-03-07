@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Localization;
 using NET_Advanced.Data;
 using NET_Advanced.Models;
 using Newtonsoft.Json;
@@ -15,10 +16,12 @@ namespace NET_Advanced.Controllers
     public class ProductModelsController : Controller
     {
         private readonly IdentityContext _context;
+        private readonly IStringLocalizer<ProductModelsController> _localizer;
 
-        public ProductModelsController(IdentityContext context)
+        public ProductModelsController(IdentityContext context, IStringLocalizer<ProductModelsController> localizer)
         {
             _context = context;
+            _localizer = localizer;
         }
 
         // GET: ProductModels
@@ -47,7 +50,7 @@ namespace NET_Advanced.Controllers
             }
             catch (Exception)
             {
-                return Json(new { success = false, message = "Kan de request body niet lezen." });
+                return Json(new { success = false, message = "Error" });
             }
 
             ProductModel productModel;
@@ -57,28 +60,28 @@ namespace NET_Advanced.Controllers
             }
             catch (Exception)
             {
-                return Json(new { success = false, message = "Kan de JSON data niet verwerken." });
+                return Json(new { success = false, message = "Error" });
             }
 
             if (string.IsNullOrWhiteSpace(productModel.Naam))
             {
-                return Json(new { success = false, message = "Het veld 'Naam' is verplicht." });
+                return Json(new { success = false, message = "Error" });
             }
 
             if (productModel.Prijs <= 0)
             {
-                return Json(new { success = false, message = "Prijs moet een positief getal zijn." });
+                return Json(new { success = false, message = "Error" });
             }
 
             try
             {
                 _context.Add(productModel);
                 await _context.SaveChangesAsync();
-                return Json(new { success = true, message = "Product succesvol aangemaakt!" });
+                return Json(new { success = true, message = "Succes" });
             }
             catch (Exception ex)
             {
-                return Json(new { success = false, message = $"Er is een fout opgetreden bij het opslaan: {ex.Message}" });
+                return Json(new { success = false, message = "Error" });
             }
         }
 

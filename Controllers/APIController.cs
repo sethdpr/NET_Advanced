@@ -29,11 +29,6 @@ namespace NET_Advanced.Controllers
         {
             var users = await _userManager.Users.ToListAsync();
 
-            if (users == null || !users.Any())
-            {
-                return NotFound("Geen gebruikers gevonden");
-            }
-
             return Ok(users);
         }
         // DELETE: api/users/{id}
@@ -41,11 +36,6 @@ namespace NET_Advanced.Controllers
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userManager.FindByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound("De gebruiker bestaat niet.");
-            }
-
             var result = await _userManager.DeleteAsync(user);
 
             if (result.Succeeded)

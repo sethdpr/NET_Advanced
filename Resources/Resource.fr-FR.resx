@@ -118,13 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="HomePageDescription" xml:space="preserve">
-    <value>Utilisez la barre de navigation pour utiliser le programme.</value>
+    <value>Utilisez la barre de navigation pour accéder au programma</value>
   </data>
   <data name="HomePageTitle" xml:space="preserve">
     <value>Bienvenue chez Rita!</value>
-  </data>
-  <data name="UserlistPageUsernameHeader" xml:space="preserve">
-    <value>Nom d'utilisateur</value>
   </data>
   <data name="UserlistPageTitle" xml:space="preserve">
     <value>Liste d'utilisateurs</value>
@@ -136,21 +133,99 @@
     <value>Créer</value>
   </data>
   <data name="OrderPageAddNewOrderByClient" xml:space="preserve">
-    <value>créer une nouvelle commande pour</value>
+    <value>Créer une nouvelle commande pour</value>
   </data>
   <data name="OrderPageAddNewOrderTableHeader" xml:space="preserve">
     <value>Produits et quantités</value>
   </data>
   <data name="IfNoProducts" xml:space="preserve">
-    <value>Aucun produit disponible</value>
+    <value>Pas de produit disponible</value>
   </data>
   <data name="BackToList" xml:space="preserve">
-    <value>Retourner à la liste</value>
+    <value>Retour vers liste</value>
   </data>
   <data name="Delete" xml:space="preserve">
-    <value>Retirer</value>
+    <value>supprimer</value>
   </data>
   <data name="DeleteWarning" xml:space="preserve">
-    <value>Êtes-vous sûr de vouloir retirer ce?</value>
+    <value>Êtes-vous sûr de vouloir supprimer ceci</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Détails</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Commande</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Modifier</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Sauvegarder</value>
+  </data>
+  <data name="OrderByName" xml:space="preserve">
+    <value>Commande de</value>
+  </data>
+  <data name="CreateNewOrder" xml:space="preserve">
+    <value>Créer une nouvelle commande</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Nom</value>
+  </data>
+  <data name="NewCustomer" xml:space="preserve">
+    <value>Nouveau client</value>
+  </data>
+  <data name="ajaxSuccesMessage" xml:space="preserve">
+    <value>Demande acceptée!</value>
+  </data>
+  <data name="ajaxErrorMessage" xml:space="preserve">
+    <value>Quelque chose n'a pas fonctionné dans la demande</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Confirmer</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Client</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Clients</value>
+  </data>
+  <data name="CreateNewCustomer" xml:space="preserve">
+    <value>Créer un nouveau client</value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Commandes</value>
+  </data>
+  <data name="NewProduct" xml:space="preserve">
+    <value>Nouveau produit</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Produits</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Bienvenue</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registrer</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Mot de passe</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Mémoriser mes coordonnées</value>
+  </data>
+  <data name="LogoutSucces" xml:space="preserve">
+    <value>La déconnexion a réussi</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Prénom</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Confirmer mot de passe</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Prix</value>
+  </data>
+  <data name="NoUsersFound" xml:space="preserve">
+    <value>Il n'y a pas d'utilisateurs maintenant</value>
   </data>
 </root>

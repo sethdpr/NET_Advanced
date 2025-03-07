@@ -1,4 +1,7 @@
-﻿<!DOCTYPE html>
+﻿@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -32,16 +35,16 @@
                         @if (User.Identity.IsAuthenticated) 
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="KlantModels" asp-action="Index">Klanten</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="KlantModels" asp-action="Index">@Localizer["Customers"]</a>
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductModels" asp-action="Index">Producten</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="ProductModels" asp-action="Index">@Localizer["Products"]</a>
                         </li>
                         @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">Gerbuikerslijst</a>
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Admin" asp-action="Index">@Localizer["UserlistPageTitle"]</a>
                             </li>
                         }
                     </ul>

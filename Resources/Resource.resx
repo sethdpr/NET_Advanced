@@ -118,13 +118,10 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <data name="HomePageDescription" xml:space="preserve">
-    <value>Gebruik de navigatiebalk om gebruik te maken van het programma</value>
+    <value>Gebruik de navigatiebalk om toegang te hebben tot het programma</value>
   </data>
   <data name="HomePageTitle" xml:space="preserve">
     <value>Welkom bij Rita!</value>
-  </data>
-  <data name="UserlistPageUsernameHeader" xml:space="preserve">
-    <value>Gebruikersnaam</value>
   </data>
   <data name="UserlistPageTitle" xml:space="preserve">
     <value>Gebruikerslijst</value>
@@ -152,5 +149,83 @@
   </data>
   <data name="DeleteWarning" xml:space="preserve">
     <value>Ben je zeker dat je dit wilt verwijderen</value>
+  </data>
+  <data name="Details" xml:space="preserve">
+    <value>Details</value>
+  </data>
+  <data name="Order" xml:space="preserve">
+    <value>Bestelling</value>
+  </data>
+  <data name="Edit" xml:space="preserve">
+    <value>Bewerken</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Opslaan</value>
+  </data>
+  <data name="OrderByName" xml:space="preserve">
+    <value>Bestelling van</value>
+  </data>
+  <data name="CreateNewOrder" xml:space="preserve">
+    <value>Maak nieuwe bestelling aan</value>
+  </data>
+  <data name="Name" xml:space="preserve">
+    <value>Naam</value>
+  </data>
+  <data name="NewCustomer" xml:space="preserve">
+    <value>Nieuwe klant</value>
+  </data>
+  <data name="ajaxSuccesMessage" xml:space="preserve">
+    <value>Verzoek succesvol!</value>
+  </data>
+  <data name="ajaxErrorMessage" xml:space="preserve">
+    <value>Er liep iets fout met het verzoek</value>
+  </data>
+  <data name="Confirm" xml:space="preserve">
+    <value>Bevestigen</value>
+  </data>
+  <data name="Customer" xml:space="preserve">
+    <value>Klant</value>
+  </data>
+  <data name="Customers" xml:space="preserve">
+    <value>Klanten</value>
+  </data>
+  <data name="CreateNewCustomer" xml:space="preserve">
+    <value>Maak een nieuwe klant aan</value>
+  </data>
+  <data name="Orders" xml:space="preserve">
+    <value>Bestellingen</value>
+  </data>
+  <data name="NewProduct" xml:space="preserve">
+    <value>Nieuw product</value>
+  </data>
+  <data name="Products" xml:space="preserve">
+    <value>Producten</value>
+  </data>
+  <data name="Welcome" xml:space="preserve">
+    <value>Welkom</value>
+  </data>
+  <data name="Register" xml:space="preserve">
+    <value>Registreer</value>
+  </data>
+  <data name="Password" xml:space="preserve">
+    <value>Wachtwoord</value>
+  </data>
+  <data name="RememberMe" xml:space="preserve">
+    <value>Onthoud mij</value>
+  </data>
+  <data name="LogoutSucces" xml:space="preserve">
+    <value>Je bent succesvol uitgelogd</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>Voornaam</value>
+  </data>
+  <data name="ConfirmPassword" xml:space="preserve">
+    <value>Wachtwoord bevestigen</value>
+  </data>
+  <data name="Price" xml:space="preserve">
+    <value>Prijs</value>
+  </data>
+  <data name="NoUsersFound" xml:space="preserve">
+    <value>Er zijn momenteel geen gebruikers</value>
   </data>
 </root>

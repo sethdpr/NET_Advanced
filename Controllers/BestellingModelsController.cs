@@ -76,8 +76,6 @@ namespace NET_Advanced.Controllers
             {
                 return NotFound();
             }
-            ViewData["Title"] = "Create";
-            ViewData["KlantNaam"] = klant.Naam;
             var producten = _context.Producten.ToList();
             ViewBag.Producten = producten;
 
@@ -93,24 +91,18 @@ namespace NET_Advanced.Controllers
         [Bind("Id,Naam,KlantId")] BestellingModel bestellingModel,
         Dictionary<int, int> Producten)
         {
-            Debug.WriteLine("Create actie POST is aangeroepen.");
 
             if (ModelState.IsValid)
             {
-                Debug.WriteLine("ModelState is geldig.");
 
                 _context.Add(bestellingModel);
                 await _context.SaveChangesAsync();
 
-                Debug.WriteLine($"Bestelling opgeslagen. BestellingId = {bestellingModel.Id}");
-
                 if (Producten != null)
                 {
-                    Debug.WriteLine("Producten ontvangen:");
                     foreach (var productId in Producten.Keys)
                     {
                         var aantal = Producten[productId];
-                        Debug.WriteLine($"ProductId = {productId}, Aantal = {aantal}");
 
                         if (aantal > 0)
                         {
@@ -122,27 +114,13 @@ namespace NET_Advanced.Controllers
                             };
 
                             _context.Add(bestellingProduct);
-                            Debug.WriteLine($"Bestelling product toegevoegd: ProductId = {productId}, Aantal = {aantal}");
                         }
                     }
 
                     await _context.SaveChangesAsync();
-                    Debug.WriteLine("Bestellingproducten opgeslagen.");
-                }
-                else
-                {
-                    Debug.WriteLine("Geen producten ontvangen.");
                 }
 
                 return RedirectToAction("Index", "BestellingModels", new { id = bestellingModel.KlantId });
-            }
-            else
-            {
-                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
-                {
-                    Debug.WriteLine($"Error: {error.ErrorMessage}");
-                }
-                Debug.WriteLine("ModelState is niet geldig.");
             }
 
             ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);

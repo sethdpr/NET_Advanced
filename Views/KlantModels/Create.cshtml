@@ -1,12 +1,10 @@
 ﻿@model NET_Advanced.Models.KlantModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Create";
-}
+<h1>@Localizer["Create"]</h1>
 
-<h1>Aanmaken</h1>
-
-<h4>Nieuwe klant</h4>
+<h4>@Localizer["NewCustomer"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -14,12 +12,12 @@
             @Html.AntiForgeryToken()
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <div class="form-group">
-                <label asp-for="Naam" class="control-label"></label>
+                <label asp-for="Naam" class="control-label">@Localizer["Name"]</label>
                 <input asp-for="Naam" class="form-control" id="klantNaam" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Maak aan" class="btn btn-primary" id="createKlantBtn" />
+                <input type="submit" value="@Localizer["Create"]" class="btn btn-primary" id="createKlantBtn" />
             </div>
         </form>
     </div>
@@ -28,7 +26,7 @@
 <div id="ajaxMessage"></div>
 
 <div>
-    <a asp-action="Index">Terug naar klantenlijst</a>
+    <a asp-action="Index">@Localizer["BackToList"]</a>
 </div>
 
 @section Scripts {
@@ -39,7 +37,6 @@
         document.getElementById("createKlantBtn").addEventListener("click", function (event) {
             event.preventDefault();
             const naam = document.getElementById("klantNaam").value;
-            console.log("Verzonden data:", { Naam: naam });
 
             fetch('/KlantModels/CreateAjax', {
                 method: 'POST',
@@ -51,7 +48,6 @@
             })
             .then(response => response.json())
             .then(data => {
-                console.log("Response JSON data:", data);
 
                 const messageDiv = document.getElementById("ajaxMessage");
 

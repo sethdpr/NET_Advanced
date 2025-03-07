@@ -21,20 +21,16 @@ namespace NET_Advanced.Middleware
         {
             if (_next == null)
             {
-                throw new InvalidOperationException("RequestDelegate _next is null. Controleer of de middleware correct is geregistreerd.");
+                throw new InvalidOperationException();
             }
 
             try
             {
                 await _next(context);
             }
-            catch (Exception ex)
+            catch
             {
-                string message = $"Er is een fout opgetreden: {ex.Message}";
-                _logger?.LogError(ex, message);
-
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
-                await context.Response.WriteAsync("Er is iets mis gegaan. Probeer het later opnieuw.");
             }
         }
 

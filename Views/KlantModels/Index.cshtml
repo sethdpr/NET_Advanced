@@ -1,21 +1,18 @@
 ﻿@model IEnumerable<NET_Advanced.Models.KlantModel>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Index";
-}
-
-<h1>Klanten</h1>
+<h1>@Localizer["Customers"]</h1>
 
 <p>
-    <a asp-action="Create">Maak een nieuwe klant aan</a>
+    <a asp-action="Create">@Localizer["CreateNewCustomer"]</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Naam)
+                <p>@Localizer["Name"]</p>
             </th>
-            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -25,11 +22,11 @@
                 @Html.DisplayFor(modelItem => item.Naam)
             </td>
             <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Bewerk</a> |
-                <a asp-controller="BestellingModels" asp-action="Index" asp-route-id="@item.Id">Bestellingen</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Verwijder</a>
+                <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Edit"]</a> |
+                <a asp-controller="BestellingModels" asp-action="Index" asp-route-id="@item.Id">@Localizer["Orders"]</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a>
             </td>
-        </tr>
+        </tr>   
 }
     </tbody>
 </table>

@@ -1,12 +1,10 @@
 ﻿@model NET_Advanced.Models.BestellingModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<h1>@Localizer["Edit"]</h1>
 
-<h1>Edit</h1>
-
-<h4>BestellingModel</h4>
+<h4>@Localizer["Order"]</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
@@ -24,14 +22,14 @@
                 <span asp-validation-for="KlantId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
+                <input type="submit" value="@Localizer["Save"]" class="btn btn-primary" />
             </div>
         </form>
     </div>
 </div>
 
 <div>
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Index">@Localizer["BackToList"]</a>
 </div>
 
 @section Scripts {

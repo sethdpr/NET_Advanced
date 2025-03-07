@@ -1,13 +1,11 @@
 ﻿@model NET_Advanced.Models.BestellingModel
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
 
-@{
-    ViewData["Title"] = "Details";
-}
-
-<h1>Details</h1>
+<h1>@Localizer["Details"]</h1>
 
 <div>
-    <h4>BestellingModel</h4>
+    <h4>@Localizer["Order"]</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
@@ -25,6 +23,6 @@
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.Id">Edit</a> |
-    <a asp-action="Index">Back to List</a>
+    <a asp-action="Edit" asp-route-id="@Model?.Id">@Localizer["Edit"]</a> |
+    <a asp-action="Index">@Localizer["BackToList"]</a>
 </div>
