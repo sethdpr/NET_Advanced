@@ -163,7 +163,7 @@
     <value>Sauvegarder</value>
   </data>
   <data name="OrderByName" xml:space="preserve">
-    <value>Commande de</value>
+    <value>Commandes de</value>
   </data>
   <data name="CreateNewOrder" xml:space="preserve">
     <value>Créer une nouvelle commande</value>

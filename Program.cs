@@ -38,27 +38,14 @@ builder.Services.AddControllers()
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
     });
 
-//swagger to test api
+// Swagger to test API
 builder.Services.AddSwaggerGen(c =>
 {
     c.SwaggerDoc("v1", new OpenApiInfo { Title = "ApplicationName", Version = "v1" });
 });
 
-/*builder.Services.AddAuthentication(options =>
-{
-    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-})
-.AddCookie(options =>
-{
-    options.LoginPath = "/Account/Login";
-    options.AccessDeniedPath = "/Account/AccessDenied";
-    options.Cookie.Name = "AuthorisatieCookie";
-    options.ExpireTimeSpan = TimeSpan.FromDays(365);
-});*/
-
-
 var app = builder.Build();
+
 app.UseMiddleware<LanguageMiddleware>();
 app.UseMiddleware<ErrorHandlingMiddleware>();
 
@@ -78,7 +65,7 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-//configure project for mvc and razor pages
+// Configure MVC and Razor Pages
 app.UseEndpoints(endpoints =>
 {
     endpoints.MapControllers();
@@ -94,6 +81,7 @@ app.MapControllerRoute(
     pattern: "BestellingModels/Index/{klantId}",
     defaults: new { controller = "BestellingModels", action = "Index" });
 
+// Seed roles and users
 await RoleInitializer.SeedDatabaseAsync(app.Services);
 
 app.Run();
@@ -117,8 +105,8 @@ public static class RoleInitializer
 
         var users = new[]
         {
-            new { Email = "seth.depreter@gmail.com", Voornaam = "Seth", Achternaam = "De Preter", Password = "Sethseth55!", Role = "Admin", IsAdmin = true },
-            new { Email = "julie.beutels04@gmail.com", Voornaam = "Julie", Achternaam = "Beutels", Password = "Juliejulie55!", Role = "Employee", IsAdmin = false }
+            new { Email = "seth.depreter@gmail.com", Voornaam = "Seth", Achternaam = "De Preter", Password = "Sethseth55!", Role = "Admin" },
+            new { Email = "julie.beutels04@gmail.com", Voornaam = "Julie", Achternaam = "Beutels", Password = "Juliejulie55!", Role = "Employee" }
         };
 
         foreach (var userData in users)
@@ -131,8 +119,7 @@ public static class RoleInitializer
                     UserName = userData.Email,
                     Email = userData.Email,
                     Voornaam = userData.Voornaam,
-                    Achternaam = userData.Achternaam,
-                    IsAdmin = userData.IsAdmin
+                    Achternaam = userData.Achternaam
                 };
                 await userManager.CreateAsync(user, userData.Password);
             }

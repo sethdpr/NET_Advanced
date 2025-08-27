@@ -25,11 +25,25 @@ namespace NET_Advanced.Controllers
 
         // GET: api/users
         [HttpGet("users")]
-        public async Task<ActionResult<IEnumerable<NET_AdvancedUser>>> GetAllUsers()
+        public async Task<ActionResult<IEnumerable<UserDto>>> GetAllUsers()
         {
             var users = await _userManager.Users.ToListAsync();
 
-            return Ok(users);
+            var userDtos = new List<UserDto>();
+            foreach (var user in users)
+            {
+                var roles = await _userManager.GetRolesAsync(user);
+                userDtos.Add(new UserDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    Voornaam = user.Voornaam,
+                    Achternaam = user.Achternaam,
+                    Roles = roles
+                });
+            }
+
+            return Ok(userDtos);
         }
         // DELETE: api/users/{id}
         [HttpDelete("users/{id}")]

@@ -9,9 +9,11 @@ using NET_Advanced.Data;
 using NET_Advanced.Resources;
 using NET_Advanced.Models;
 using Newtonsoft.Json;
+using Microsoft.AspNetCore.Authorization;
 
 namespace NET_Advanced.Controllers
 {
+    [Authorize]
     public class KlantModelsController : Controller
     {
         private readonly IdentityContext _context;

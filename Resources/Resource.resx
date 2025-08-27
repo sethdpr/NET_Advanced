@@ -163,7 +163,7 @@
     <value>Opslaan</value>
   </data>
   <data name="OrderByName" xml:space="preserve">
-    <value>Bestelling van</value>
+    <value>Bestellingen van</value>
   </data>
   <data name="CreateNewOrder" xml:space="preserve">
     <value>Maak nieuwe bestelling aan</value>

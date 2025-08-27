@@ -12,7 +12,15 @@ namespace NET_Advanced.Models
         [StringLength(100)]
         public string Naam { get; set; }
 
+        [Required]
         public int KlantId { get; set; }
-        public KlantModel Klant { get; set; }
+
+        public KlantModel? Klant { get; set; }
+        public List<BestellingProductModel>? BestellingProducten { get; set; }
+
+        public string? GemaaktDoor { get; set; }
+
+        public DateTime AangemaaktOp { get; set; } = DateTime.Now;
     }
+
 }

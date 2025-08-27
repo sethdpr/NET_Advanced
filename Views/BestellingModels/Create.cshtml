@@ -4,13 +4,18 @@
 
 <h1>@Localizer["Create"]</h1>
 
-<h4 style="display:inline;">@Localizer["OrderPageAddNewOrderByClient"]</h4>
-<h4 style="display:inline;">@ViewData["KlantNaam"]</h4>
+<h4>@Localizer["OrderPageAddNewOrderByClient"] @ViewData["KlantNaam"]</h4>
 <hr />
+
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create" method="post" asp-route-klantId="@Model.KlantId">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <form asp-action="Create" method="post">
+            <!-- KlantId maar één keer -->
+            <input type="hidden" asp-for="KlantId" />
+
+            <!-- Toon álle validatiefouten -->
+            <div asp-validation-summary="All" class="text-danger"></div>
+
             <div class="form-group">
                 <label asp-for="Naam" class="control-label">@Localizer["Name"]</label>
                 <input asp-for="Naam" class="form-control" />
@@ -19,23 +24,14 @@
 
             <div class="form-group">
                 <label>@Localizer["OrderPageAddNewOrderTableHeader"]</label>
-                @if (ViewBag.Producten != null)
+                @if (ViewBag.Producten is IEnumerable<NET_Advanced.Models.ProductModel> producten && producten.Any())
                 {
-                    var producten = ViewBag.Producten as IEnumerable<NET_Advanced.Models.ProductModel>;
-
-                    if (producten != null && producten.Any())
+                    foreach (var product in producten)
                     {
-                        @foreach (var product in producten)
-                        {
-                            <div class="form-group">
-                                <label>@product.Naam</label>
-                                <input type="number" name="Producten[@product.Id]" class="form-control"/>
-                            </div>
-                        }
-                    }
-                    else
-                    {
-                        <p>@Localizer["IfNoProducts"]</p>
+                        <div class="form-group">
+                            <label>@product.Naam</label>
+                            <input type="number" name="Producten[@product.Id]" class="form-control" min="0" value="0" />
+                        </div>
                     }
                 }
                 else
@@ -56,7 +52,5 @@
 </div>
 
 @section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+    @await Html.PartialAsync("_ValidationScriptsPartial")
 }

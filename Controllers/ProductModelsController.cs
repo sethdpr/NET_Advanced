@@ -10,7 +10,6 @@ using Microsoft.Extensions.Localization;
 using NET_Advanced.Data;
 using NET_Advanced.Models;
 using Newtonsoft.Json;
-
 namespace NET_Advanced.Controllers
 {
     public class ProductModelsController : Controller
@@ -25,6 +24,7 @@ namespace NET_Advanced.Controllers
         }
 
         // GET: ProductModels
+        [Authorize]
         public async Task<IActionResult> Index()
         {
             return View(await _context.Producten.ToListAsync());
@@ -38,6 +38,7 @@ namespace NET_Advanced.Controllers
         // POST: ProductModels/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> CreateAjax()
         {
             string requestBody;
@@ -86,6 +87,7 @@ namespace NET_Advanced.Controllers
         }
 
         // GET: ProductModels/Edit/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -106,6 +108,7 @@ namespace NET_Advanced.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,Prijs")] ProductModel productModel)
         {
             if (id != productModel.Id)
@@ -137,6 +140,7 @@ namespace NET_Advanced.Controllers
         }
 
         // GET: ProductModels/Delete/5
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -157,6 +161,7 @@ namespace NET_Advanced.Controllers
         // POST: ProductModels/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var productModel = await _context.Producten.FindAsync(id);

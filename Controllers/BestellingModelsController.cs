@@ -1,11 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
 using NET_Advanced.Data;
 using NET_Advanced.Models;
@@ -13,6 +11,7 @@ using NET_Advanced.ViewModels;
 
 namespace NET_Advanced.Controllers
 {
+    [Authorize]
     public class BestellingModelsController : Controller
     {
         private readonly IdentityContext _context;
@@ -25,19 +24,12 @@ namespace NET_Advanced.Controllers
         // GET: BestellingModels
         public async Task<IActionResult> Index(int id)
         {
-            var klant = _context.Klanten.FirstOrDefault(k => k.Id == id);
-            if (klant == null)
-            {
-                return NotFound();
-            }
-            var bestellingen = _context.Bestellingen
-                .Where(b => b.KlantId == id)
-                .ToList();
+            var klant = await _context.Klanten.FindAsync(id);
+            if (klant == null) return NotFound();
 
-            var klantNaam = _context.Klanten
-                .Where(k => k.Id == id)
-                .Select(k => k.Naam)
-                .FirstOrDefault();
+            var bestellingen = await _context.Bestellingen
+                .Where(b => b.KlantId == id)
+                .ToListAsync();
 
             var viewModel = new BestellingIndexViewModel
             {
@@ -49,113 +41,86 @@ namespace NET_Advanced.Controllers
             return View(viewModel);
         }
 
-        // GET: BestellingModels/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var bestellingModel = await _context.Bestellingen
-                .Include(b => b.Klant)
-                .FirstOrDefaultAsync(m => m.Id == id);
-            if (bestellingModel == null)
-            {
-                return NotFound();
-            }
-
-            return View(bestellingModel);
-        }
-
         // GET: BestellingModels/Create
         public IActionResult Create(int klantId)
         {
             var klant = _context.Klanten.FirstOrDefault(k => k.Id == klantId);
-            if (klant == null)
-            {
-                return NotFound();
-            }
+            if (klant == null) return NotFound();
+
             var producten = _context.Producten.ToList();
             ViewBag.Producten = producten;
+            ViewData["KlantNaam"] = klant.Naam;
 
             return View(new BestellingModel { KlantId = klantId });
         }
 
         // POST: BestellingModels/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(
-        [Bind("Id,Naam,KlantId")] BestellingModel bestellingModel,
-        Dictionary<int, int> Producten)
+        public async Task<IActionResult> Create(BestellingModel bestellingModel)
         {
-
             if (ModelState.IsValid)
             {
+                bestellingModel.GemaaktDoor = User.Identity?.Name ?? "Onbekend";
+                bestellingModel.AangemaaktOp = DateTime.Now;
 
-                _context.Add(bestellingModel);
+                _context.Bestellingen.Add(bestellingModel);
                 await _context.SaveChangesAsync();
 
-                if (Producten != null)
+                var productKeys = Request.Form.Keys.Where(k => k.StartsWith("Producten["));
+                foreach (var key in productKeys)
                 {
-                    foreach (var productId in Producten.Keys)
+                    var productIdStr = key.Replace("Producten[", "").Replace("]", "");
+                    if (int.TryParse(productIdStr, out int productId) &&
+                        int.TryParse(Request.Form[key], out int aantal) && aantal > 0)
                     {
-                        var aantal = Producten[productId];
-
-                        if (aantal > 0)
+                        _context.BestellingProducten.Add(new BestellingProductModel
                         {
-                            var bestellingProduct = new BestellingProductModel
-                            {
-                                BestellingId = bestellingModel.Id,
-                                ProductId = productId,
-                                Aantal = aantal
-                            };
-
-                            _context.Add(bestellingProduct);
-                        }
+                            BestellingId = bestellingModel.Id,
+                            ProductId = productId,
+                            Aantal = aantal
+                        });
                     }
-
-                    await _context.SaveChangesAsync();
                 }
 
-                return RedirectToAction("Index", "BestellingModels", new { id = bestellingModel.KlantId });
+                await _context.SaveChangesAsync();
+
+                return RedirectToAction("Index", new { id = bestellingModel.KlantId });
             }
 
-            ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);
+            var errors = ModelState
+                .SelectMany(kvp => kvp.Value!.Errors.Select(e => new { Field = kvp.Key, Error = e.ErrorMessage }))
+                .ToList();
+
+            ViewBag.ValidationErrors = errors;
+
+            ViewBag.Producten = await _context.Producten.ToListAsync();
+            ViewData["KlantNaam"] = await _context.Klanten
+                .Where(k => k.Id == bestellingModel.KlantId)
+                .Select(k => k.Naam)
+                .FirstOrDefaultAsync();
+
             return View(bestellingModel);
         }
-
 
         // GET: BestellingModels/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var bestellingModel = await _context.Bestellingen.FindAsync(id);
-            if (bestellingModel == null)
-            {
-                return NotFound();
-            }
+            if (bestellingModel == null) return NotFound();
+
             ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);
             return View(bestellingModel);
         }
 
         // POST: BestellingModels/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,KlantId")] BestellingModel bestellingModel)
         {
-            if (id != bestellingModel.Id)
-            {
-                return NotFound();
-            }
+            if (id != bestellingModel.Id) return NotFound();
 
             if (ModelState.IsValid)
             {
@@ -167,16 +132,13 @@ namespace NET_Advanced.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     if (!BestellingModelExists(bestellingModel.Id))
-                    {
                         return NotFound();
-                    }
                     else
-                    {
                         throw;
-                    }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index", new { id = bestellingModel.KlantId });
             }
+
             ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);
             return View(bestellingModel);
         }
@@ -184,18 +146,12 @@ namespace NET_Advanced.Controllers
         // GET: BestellingModels/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var bestellingModel = await _context.Bestellingen
                 .Include(b => b.Klant)
                 .FirstOrDefaultAsync(m => m.Id == id);
-            if (bestellingModel == null)
-            {
-                return NotFound();
-            }
+            if (bestellingModel == null) return NotFound();
 
             return View(bestellingModel);
         }
@@ -209,10 +165,11 @@ namespace NET_Advanced.Controllers
             if (bestellingModel != null)
             {
                 _context.Bestellingen.Remove(bestellingModel);
+                await _context.SaveChangesAsync();
+                return RedirectToAction("Index", new { id = bestellingModel.KlantId });
             }
 
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index", "Klanten");
         }
 
         private bool BestellingModelExists(int id)

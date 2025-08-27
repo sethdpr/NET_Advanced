@@ -127,19 +127,19 @@ namespace NET_Advanced.Areas.Identity.Pages.Account
                 {
                     Email = Input.Email,
                     Voornaam = Input.Voornaam,
-                    Achternaam = Input.Achternaam,
-                    IsAdmin = (Input.Email == "seth.depreter@gmail.com")
+                    Achternaam = Input.Achternaam
                 };
 
                 await _userStore.SetUserNameAsync(user, Input.Email, CancellationToken.None);
                 await _emailStore.SetEmailAsync(user, Input.Email, CancellationToken.None);
+
                 var result = await _userManager.CreateAsync(user, Input.Password);
 
                 if (result.Succeeded)
                 {
                     _logger.LogInformation("User created a new account with password.");
 
-                    if (user.Email == "seth.depreter@gmail.com")
+                    if (Input.Email == "seth.depreter@gmail.com")
                     {
                         await _userManager.AddToRoleAsync(user, "Admin");
                     }

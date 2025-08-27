@@ -163,7 +163,7 @@
     <value>Save</value>
   </data>
   <data name="OrderByName" xml:space="preserve">
-    <value>Order of</value>
+    <value>Orders of</value>
   </data>
   <data name="CreateNewOrder" xml:space="preserve">
     <value>Create new order</value>

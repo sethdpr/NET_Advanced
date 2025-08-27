@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NET_Advanced.Data;
 
@@ -10,9 +11,11 @@ using NET_Advanced.Data;
 namespace NET_Advanced.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20250826145433_AddBestellingProductModel")]
+    partial class AddBestellingProductModel
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
@@ -246,10 +249,14 @@ namespace NET_Advanced.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("AangemaaktOp")
+                    b.Property<DateTime?>("DatumBetaald")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("DatumGemaakt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("GemaaktDoor")
+                        .IsRequired()
                         .HasColumnType("TEXT");
 
                     b.Property<int>("KlantId")

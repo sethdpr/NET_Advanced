@@ -16,9 +16,24 @@ public class IdentityContext : IdentityDbContext<NET_AdvancedUser>
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);
+
+        builder.Entity<BestellingProductModel>()
+               .HasKey(bp => new { bp.BestellingId, bp.ProductId });
+
+        builder.Entity<BestellingProductModel>()
+               .HasOne(bp => bp.Bestelling)
+               .WithMany()
+               .HasForeignKey(bp => bp.BestellingId);
+
+        builder.Entity<BestellingProductModel>()
+               .HasOne(bp => bp.Product)
+               .WithMany()
+               .HasForeignKey(bp => bp.ProductId);
     }
+
     public DbSet<KlantModel> Klanten { get; set; }
     public DbSet<ProductModel> Producten { get; set; }
     public DbSet<BestellingModel> Bestellingen { get; set; }
+    public DbSet<BestellingProductModel> BestellingProducten { get; set; }
     public DbSet<API> API { get; set; }
 }

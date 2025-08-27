@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace NET_Advanced.Models
 {
@@ -12,5 +13,8 @@ namespace NET_Advanced.Models
 
         [Range(1, 1000)]
         public int Aantal { get; set; }
+
+        [Column(TypeName = "decimal(18,2)")]
+        public decimal Prijs { get; set; }
     }
 }

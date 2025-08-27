@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NET_Advanced.Data;
 
@@ -10,9 +11,11 @@ using NET_Advanced.Data;
 namespace NET_Advanced.Migrations
 {
     [DbContext(typeof(IdentityContext))]
-    partial class IdentityContextModelSnapshot : ModelSnapshot
+    [Migration("20250826142516_RemoveIsAdminFromUser")]
+    partial class RemoveIsAdminFromUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.1");
@@ -246,12 +249,6 @@ namespace NET_Advanced.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("AangemaaktOp")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("GemaaktDoor")
-                        .HasColumnType("TEXT");
-
                     b.Property<int>("KlantId")
                         .HasColumnType("INTEGER");
 
@@ -265,32 +262,6 @@ namespace NET_Advanced.Migrations
                     b.HasIndex("KlantId");
 
                     b.ToTable("Bestellingen");
-                });
-
-            modelBuilder.Entity("NET_Advanced.Models.BestellingProductModel", b =>
-                {
-                    b.Property<int>("BestellingId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("ProductId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int>("Aantal")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<int?>("BestellingModelId")
-                        .HasColumnType("INTEGER");
-
-                    b.Property<decimal>("Prijs")
-                        .HasColumnType("decimal(18,2)");
-
-                    b.HasKey("BestellingId", "ProductId");
-
-                    b.HasIndex("BestellingModelId");
-
-                    b.HasIndex("ProductId");
-
-                    b.ToTable("BestellingProducten");
                 });
 
             modelBuilder.Entity("NET_Advanced.Models.KlantModel", b =>
@@ -388,34 +359,6 @@ namespace NET_Advanced.Migrations
                         .IsRequired();
 
                     b.Navigation("Klant");
-                });
-
-            modelBuilder.Entity("NET_Advanced.Models.BestellingProductModel", b =>
-                {
-                    b.HasOne("NET_Advanced.Models.BestellingModel", "Bestelling")
-                        .WithMany()
-                        .HasForeignKey("BestellingId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("NET_Advanced.Models.BestellingModel", null)
-                        .WithMany("BestellingProducten")
-                        .HasForeignKey("BestellingModelId");
-
-                    b.HasOne("NET_Advanced.Models.ProductModel", "Product")
-                        .WithMany()
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Bestelling");
-
-                    b.Navigation("Product");
-                });
-
-            modelBuilder.Entity("NET_Advanced.Models.BestellingModel", b =>
-                {
-                    b.Navigation("BestellingProducten");
                 });
 
             modelBuilder.Entity("NET_Advanced.Models.KlantModel", b =>
