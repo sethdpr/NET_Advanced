@@ -80,7 +80,7 @@ namespace NET_Advanced.Controllers
                 await _context.SaveChangesAsync();
                 return Json(new { success = true, message = "Succes" });
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return Json(new { success = false, message = "Error" });
             }

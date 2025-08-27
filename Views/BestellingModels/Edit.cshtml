@@ -7,20 +7,38 @@
 <h4>@Localizer["Order"]</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
+    <div class="col-md-6">
+        <form asp-action="Edit" method="post">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
             <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="KlantId" />
+
             <div class="form-group">
-                <label asp-for="Naam" class="control-label"></label>
+                <label asp-for="Naam" class="control-label">@Localizer["Name"]</label>
                 <input asp-for="Naam" class="form-control" />
                 <span asp-validation-for="Naam" class="text-danger"></span>
             </div>
+
             <div class="form-group">
-                <label asp-for="KlantId" class="control-label"></label>
-                <select asp-for="KlantId" class="form-control" asp-items="ViewBag.KlantId"></select>
-                <span asp-validation-for="KlantId" class="text-danger"></span>
+                <label>@Localizer["OrderPageAddNewOrderTableHeader"]</label>
+                @if (ViewBag.Producten is IEnumerable<NET_Advanced.Models.ProductModel> producten && producten.Any())
+                {
+                    var aantallen = ViewBag.ProductAantallen as Dictionary<int, int>;
+                    foreach (var product in producten)
+                    {
+                        var aantal = aantallen != null && aantallen.ContainsKey(product.Id) ? aantallen[product.Id] : 0;
+                        <div class="form-group">
+                            <label>@product.Naam</label>
+                            <input type="number" name="Producten[@product.Id]" class="form-control" min="0" value="@aantal" />
+                        </div>
+                    }
+                }
+                else
+                {
+                    <p>@Localizer["IfNoProducts"]</p>
+                }
             </div>
+
             <div class="form-group">
                 <input type="submit" value="@Localizer["Save"]" class="btn btn-primary" />
             </div>
@@ -29,9 +47,11 @@
 </div>
 
 <div>
-    <a asp-action="Index">@Localizer["BackToList"]</a>
+    <a asp-action="Index" asp-route-id="@Model.KlantId">@Localizer["BackToList"]</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

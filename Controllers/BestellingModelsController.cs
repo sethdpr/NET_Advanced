@@ -108,8 +108,19 @@ namespace NET_Advanced.Controllers
         {
             if (id == null) return NotFound();
 
-            var bestellingModel = await _context.Bestellingen.FindAsync(id);
+            var bestellingModel = await _context.Bestellingen
+                .Include(b => b.BestellingProducten)
+                .FirstOrDefaultAsync(b => b.Id == id);
+
             if (bestellingModel == null) return NotFound();
+
+            var producten = await _context.Producten.ToListAsync();
+
+            var productAantallen = bestellingModel.BestellingProducten
+                .ToDictionary(bp => bp.ProductId, bp => bp.Aantal);
+
+            ViewBag.Producten = producten;
+            ViewBag.ProductAantallen = productAantallen;
 
             ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);
             return View(bestellingModel);
@@ -118,7 +129,7 @@ namespace NET_Advanced.Controllers
         // POST: BestellingModels/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Naam,KlantId")] BestellingModel bestellingModel)
+        public async Task<IActionResult> Edit(int id, BestellingModel bestellingModel)
         {
             if (id != bestellingModel.Id) return NotFound();
 
@@ -127,6 +138,27 @@ namespace NET_Advanced.Controllers
                 try
                 {
                     _context.Update(bestellingModel);
+                    await _context.SaveChangesAsync();
+
+                    var oudeProducten = _context.BestellingProducten.Where(bp => bp.BestellingId == id);
+                    _context.BestellingProducten.RemoveRange(oudeProducten);
+
+                    var productKeys = Request.Form.Keys.Where(k => k.StartsWith("Producten["));
+                    foreach (var key in productKeys)
+                    {
+                        var productIdStr = key.Replace("Producten[", "").Replace("]", "");
+                        if (int.TryParse(productIdStr, out int productId) &&
+                            int.TryParse(Request.Form[key], out int aantal) && aantal > 0)
+                        {
+                            _context.BestellingProducten.Add(new BestellingProductModel
+                            {
+                                BestellingId = bestellingModel.Id,
+                                ProductId = productId,
+                                Aantal = aantal
+                            });
+                        }
+                    }
+
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -139,9 +171,31 @@ namespace NET_Advanced.Controllers
                 return RedirectToAction("Index", new { id = bestellingModel.KlantId });
             }
 
+            var producten = await _context.Producten.ToListAsync();
+            ViewBag.Producten = producten;
+            ViewBag.ProductAantallen = new Dictionary<int, int>();
+
             ViewData["KlantId"] = new SelectList(_context.Klanten, "Id", "Naam", bestellingModel.KlantId);
             return View(bestellingModel);
         }
+
+
+        // GET: BestellingModels/Details/5
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id == null) return NotFound();
+
+            var bestelling = await _context.Bestellingen
+                .Include(b => b.Klant)
+                .Include(b => b.BestellingProducten!)
+                    .ThenInclude(bp => bp.Product)
+                .FirstOrDefaultAsync(m => m.Id == id);
+
+            if (bestelling == null) return NotFound();
+
+            return View(bestelling);
+        }
+
 
         // GET: BestellingModels/Delete/5
         public async Task<IActionResult> Delete(int? id)

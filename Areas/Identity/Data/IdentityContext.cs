@@ -22,7 +22,7 @@ public class IdentityContext : IdentityDbContext<NET_AdvancedUser>
 
         builder.Entity<BestellingProductModel>()
                .HasOne(bp => bp.Bestelling)
-               .WithMany()
+               .WithMany(b => b.BestellingProducten)
                .HasForeignKey(bp => bp.BestellingId);
 
         builder.Entity<BestellingProductModel>()
