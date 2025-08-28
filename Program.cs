@@ -97,11 +97,10 @@ public static class RoleInitializer
                 await roleManager.CreateAsync(new IdentityRole(roleName));
             }
         }
-
+        var adminPassword = Environment.GetEnvironmentVariable("AdminPassword");
         var users = new[]
         {
-            new { Email = "seth.depreter@gmail.com", Voornaam = "Seth", Achternaam = "De Preter", Password = "Sethseth55!", Role = "Admin" },
-            new { Email = "julie.beutels04@gmail.com", Voornaam = "Julie", Achternaam = "Beutels", Password = "Juliejulie55!", Role = "Employee" }
+            new { Email = "seth.depreter@gmail.com", Voornaam = "Seth", Achternaam = "De Preter", Password = adminPassword, Role = "Admin" }
         };
 
         foreach (var userData in users)

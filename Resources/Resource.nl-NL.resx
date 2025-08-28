@@ -228,4 +228,31 @@
   <data name="NoUsersFound" xml:space="preserve">
     <value>Er zijn momenteel geen gebruikers</value>
   </data>
+  <data name="Payment" xml:space="preserve">
+    <value>Betaling</value>
+  </data>
+  <data name="PaymentOverview" xml:space="preserve">
+    <value>Betalingsoverzicht</value>
+  </data>
+  <data name="NoOrdersForClient" xml:space="preserve">
+    <value>Geen bestellingen voor deze klant</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Product</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Aantal</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>Eenheidsprijs</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Totaal</value>
+  </data>
+  <data name="TotalPrice" xml:space="preserve">
+    <value>Totaalprijs</value>
+  </data>
+  <data name="NoProductsInOrder" xml:space="preserve">
+    <value>Deze bestelling heeft geen producten</value>
+  </data>
 </root>

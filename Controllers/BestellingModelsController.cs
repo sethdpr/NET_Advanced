@@ -230,5 +230,29 @@ namespace NET_Advanced.Controllers
         {
             return _context.Bestellingen.Any(e => e.Id == id);
         }
+
+        // GET: BestellingModels/Payment/5
+        public async Task<IActionResult> Payment(int klantId)
+        {
+            var klant = await _context.Klanten
+                .FirstOrDefaultAsync(k => k.Id == klantId);
+
+            if (klant == null) return NotFound();
+
+            var bestellingen = await _context.Bestellingen
+                .Where(b => b.KlantId == klantId)
+                .Include(b => b.BestellingProducten!)
+                    .ThenInclude(bp => bp.Product)
+                .ToListAsync();
+
+            var totaalPrijs = bestellingen
+                .SelectMany(b => b.BestellingProducten!)
+                .Sum(bp => bp.Aantal * bp.Product.Prijs);
+
+            ViewData["KlantNaam"] = klant.Naam;
+            ViewData["TotaalPrijs"] = totaalPrijs;
+
+            return View(bestellingen);
+        }
     }
 }

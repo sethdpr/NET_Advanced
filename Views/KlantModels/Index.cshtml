@@ -24,7 +24,8 @@
             <td>
                 <a asp-action="Edit" asp-route-id="@item.Id">@Localizer["Edit"]</a> |
                 <a asp-controller="BestellingModels" asp-action="Index" asp-route-id="@item.Id">@Localizer["Orders"]</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a>
+                <a asp-action="Delete" asp-route-id="@item.Id">@Localizer["Delete"]</a> |
+                <a asp-controller="BestellingModels" asp-action="Payment" asp-route-klantId="@item.Id">@Localizer["Payment"]</a>
             </td>
         </tr>   
 }

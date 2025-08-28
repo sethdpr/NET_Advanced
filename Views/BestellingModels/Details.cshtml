@@ -9,13 +9,14 @@
     <hr />
     <dl class="row">
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Naam)
+            @Localizer["Name"]
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Naam)
         </dd>
+
         <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Klant)
+            @Localizer["Customer"]
         </dt>
         <dd class="col-sm-10">
             @Html.DisplayFor(model => model.Klant.Naam)
@@ -26,7 +27,7 @@
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>@Localizer["ProductName"]</th>
+                <th>@Localizer["Name"]</th>
                 <th>@Localizer["Quantity"]</th>
             </tr>
         </thead>

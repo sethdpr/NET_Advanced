@@ -1,0 +1,50 @@
+﻿@model IEnumerable<NET_Advanced.Models.BestellingModel>
+@using Microsoft.Extensions.Localization
+@inject IStringLocalizer<NET_Advanced.Resources.Resource> Localizer;
+
+<h1>@Localizer["PaymentOverview"] - @ViewData["KlantNaam"]</h1>
+<hr />
+
+@if (Model != null && Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>@Localizer["Order"]</th>
+                <th>@Localizer["Product"]</th>
+                <th>@Localizer["Quantity"]</th>
+                <th>@Localizer["UnitPrice"]</th>
+                <th>@Localizer["Total"]</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var bestelling in Model)
+            {
+                foreach (var bp in bestelling.BestellingProducten)
+                {
+                    <tr>
+                        <td>@bestelling.Naam</td>
+                        <td>@bp.Product.Naam</td>
+                        <td>@bp.Aantal</td>
+                        <td>@bp.Product.Prijs</td>
+                        <td>@(bp.Aantal * bp.Product.Prijs)</td>
+                    </tr>
+                }
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="4" class="text-right"><strong>@Localizer["TotalPrice"]:</strong></td>
+                <td><strong>@ViewData["TotaalPrijs"].ToString()</strong></td>
+            </tr>
+        </tfoot>
+    </table>
+    <div>
+        <a asp-controller="KlantModels" asp-action="Index">@Localizer["BackToList"]</a>
+    </div>
+
+}
+else
+{
+    <p>@Localizer["NoOrdersForClient"]</p>
+}

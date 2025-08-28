@@ -228,4 +228,31 @@
   <data name="NoUsersFound" xml:space="preserve">
     <value>Il n'y a pas d'utilisateurs maintenant</value>
   </data>
+  <data name="Payment" xml:space="preserve">
+    <value>Paiement</value>
+  </data>
+  <data name="PaymentOverview" xml:space="preserve">
+    <value>Compte</value>
+  </data>
+  <data name="NoOrdersForClient" xml:space="preserve">
+    <value>Aucune commande pour ce client</value>
+  </data>
+  <data name="Product" xml:space="preserve">
+    <value>Produit</value>
+  </data>
+  <data name="Quantity" xml:space="preserve">
+    <value>Quantité</value>
+  </data>
+  <data name="UnitPrice" xml:space="preserve">
+    <value>Prix unitaire</value>
+  </data>
+  <data name="Total" xml:space="preserve">
+    <value>Total</value>
+  </data>
+  <data name="TotalPrice" xml:space="preserve">
+    <value>Prix total</value>
+  </data>
+  <data name="NoProductsInOrder" xml:space="preserve">
+    <value>Aucun produit dans cette commande</value>
+  </data>
 </root>
