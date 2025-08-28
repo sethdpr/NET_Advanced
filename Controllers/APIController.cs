@@ -13,7 +13,7 @@ namespace NET_Advanced.Controllers
     [ApiController]
     [Route("api/[controller]")]
     //[Authorize]
-    //Gebruikt in AdminController.cs
+    //Used in AdminController.cs
     public class APIController : ControllerBase
     {
         private readonly UserManager<NET_AdvancedUser> _userManager;
